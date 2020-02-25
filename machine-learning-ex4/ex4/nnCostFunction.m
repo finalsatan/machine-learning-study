@@ -22,6 +22,7 @@ Theta1 = reshape(nn_params(1:hidden_layer_size * (input_layer_size + 1)), ...
 Theta2 = reshape(nn_params((1 + (hidden_layer_size * (input_layer_size + 1))):end), ...
                  num_labels, (hidden_layer_size + 1));
 
+
 % Setup some useful variables
 m = size(X, 1);
          
@@ -62,22 +63,37 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% Add ones to the X data matrix
+a1 = [ones(m, 1) X];
 
+a2 = sigmoid(a1*Theta1');
+a2 = [ones(size(a2,1), 1) a2];
 
+a3 = sigmoid(a2*Theta2');
 
+sss = 0.0;
+Y = zeros(m,num_labels);
+for i=1:m
+    Y(i,y(i)) = 1;
+    yi = Y(i,:)';
+    sss +=  -log(a3(i,:))*yi-log(1-a3(i,:))*(1-yi);
+end
+J = sss/m + (sum(sum(Theta1(:,2:size(Theta1,2)).^2)) + sum(sum(Theta2(:,2:size(Theta2,2)).^2)))*lambda/2/m;
 
+delta_3 = a3.-Y;
 
+%delta_2 = delta_3*Theta2.*sigmoidGradient(a2);
+delta_2 = delta_3*Theta2.*(a2.*(1-a2));
+delta_2 = delta_2(:,2:end);
 
+temp_Theta1 = Theta1*lambda/m;
+temp_Theta1(:,1) = 0;
 
+temp_Theta2 = Theta2*lambda/m;
+temp_Theta2(:,1) = 0;
 
-
-
-
-
-
-
-
-
+Theta2_grad = (a2'*delta_3/m)' + temp_Theta2;
+Theta1_grad = (a1'*delta_2/m)' + temp_Theta1;
 
 
 % -------------------------------------------------------------
