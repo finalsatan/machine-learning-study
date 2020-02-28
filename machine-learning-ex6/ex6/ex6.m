@@ -35,7 +35,7 @@ load('ex6data1.mat');
 plotData(X, y);
 
 fprintf('Program paused. Press enter to continue.\n');
-pause;
+%pause;
 
 %% ==================== Part 2: Training Linear SVM ====================
 %  The following code will train a linear SVM on the dataset and plot the
@@ -55,7 +55,7 @@ model = svmTrain(X, y, C, @linearKernel, 1e-3, 20);
 visualizeBoundaryLinear(X, y, model);
 
 fprintf('Program paused. Press enter to continue.\n');
-pause;
+%pause;
 
 %% =============== Part 3: Implementing Gaussian Kernel ===============
 %  You will now implement the Gaussian kernel to use
